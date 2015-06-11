@@ -8,8 +8,8 @@ import (
 	"PL0/types"
 )
 
-// NextToken output token to ch.
-func NextToken(f *os.File, ch chan *types.Token) {
+// GetToken output token to ch.
+func GetToken(f *os.File, ch chan *types.Token) {
 	b := make([]byte, types.MaxName)
 	o := 0
 
@@ -93,7 +93,7 @@ func main() {
 
 	go func() {
 		defer wg.Done()
-		NextToken(file, ch)
+		GetToken(file, ch)
 	}()
 
 	for i := range ch {
