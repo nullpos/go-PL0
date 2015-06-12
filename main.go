@@ -47,7 +47,7 @@ func GetToken(f *os.File, ch chan *types.Token) {
 						}
 
 						for j := types.KeyID(0); j < types.EndOfKeyWd; j++ {
-							if string(j) == string(tmp[:itr]) {
+							if types.KeyWdToResWd[j] == string(tmp[:itr]) {
 								token.Kind = j
 								return
 							}
@@ -145,6 +145,7 @@ func GetToken(f *os.File, ch chan *types.Token) {
 
 func main() {
 	types.InitCharClassType()
+	types.InitKeyWdToResWd()
 	filename := "../go-PL0/test.pl1"
 	file, e := os.Open(filename)
 	if e != nil {

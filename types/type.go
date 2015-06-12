@@ -25,13 +25,10 @@ func (t Token) String() string {
 	}
 }
 
-// CharClassType has byte key and KeyID value.
+// CharClassType has char (byte) key and KeyID value.
 var CharClassType = make(map[byte]KeyID)
 
-// KeyWdToResWd
-var KeyWdToResWd = make(map[KeyID]string)
-
-// InitCharClassType should be called before CharClassType
+// InitCharClassType should be called before use CharClassType
 func InitCharClassType() {
 
 	for i := byte(0); i < 128; i++ {
@@ -59,4 +56,42 @@ func InitCharClassType() {
 	CharClassType[','] = Comma
 	CharClassType[';'] = Semicolon
 	CharClassType[':'] = Colon
+}
+
+// KeyWdToResWd has KeyID key and reserved word value.
+var KeyWdToResWd = make(map[KeyID]string)
+
+// InitKeyWdToResWd should be called before use KeyWdToResWd
+func InitKeyWdToResWd() {
+	KeyWdToResWd[Begin] = "begin"
+	KeyWdToResWd[End] = "end"
+	KeyWdToResWd[If] = "if"
+	KeyWdToResWd[Then] = "then"
+	KeyWdToResWd[While] = "while"
+	KeyWdToResWd[Do] = "do"
+	KeyWdToResWd[Ret] = "return"
+	KeyWdToResWd[Func] = "function"
+	KeyWdToResWd[Var] = "var"
+	KeyWdToResWd[Const] = "const"
+	KeyWdToResWd[Odd] = "odd"
+	KeyWdToResWd[Write] = "write"
+	KeyWdToResWd[WriteLn] = "writeln"
+	KeyWdToResWd[EndOfKeyWd] = "$dummy1"
+	KeyWdToResWd[Plus] = "+"
+	KeyWdToResWd[Minus] = "-"
+	KeyWdToResWd[Mult] = "*"
+	KeyWdToResWd[Div] = "/"
+	KeyWdToResWd[Lparen] = "("
+	KeyWdToResWd[Rparen] = ")"
+	KeyWdToResWd[Equal] = "="
+	KeyWdToResWd[Lss] = "<"
+	KeyWdToResWd[Gtr] = ">"
+	KeyWdToResWd[NotEq] = "<>"
+	KeyWdToResWd[LssEq] = "<="
+	KeyWdToResWd[GtrEq] = ">="
+	KeyWdToResWd[Comma] = ","
+	KeyWdToResWd[Period] = "."
+	KeyWdToResWd[Semicolon] = ";"
+	KeyWdToResWd[Assign] = ":="
+	KeyWdToResWd[EndOfKeySym] = "$dummy2"
 }
