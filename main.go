@@ -25,7 +25,7 @@ func GetToken(f *os.File, ch chan *types.Token) {
 					cc := types.CharClassType[c]
 					switch cc {
 					case types.Letter:
-						var tmp [types.MaxName]byte
+						tmp := make([]byte, types.MaxName)
 						itr := 0
 						for {
 							tmp[itr] = c
@@ -53,7 +53,7 @@ func GetToken(f *os.File, ch chan *types.Token) {
 							}
 						}
 						token.Kind = types.ID
-						token.ID = tmp
+						token.ID = string(tmp[:])
 						return
 					case types.Digit:
 						num := 0
@@ -164,9 +164,23 @@ func main() {
 		GetToken(file, ch)
 	}()
 
+	//*
+	ofilename := "../go-PL0/test-convert.pl1"
+	ofile, oe := os.OpenFile(ofilename, os.O_WRONLY|os.O_CREATE, 0600)
+	if oe != nil {
+		fmt.Println(oe)
+		return
+	}
+	defer file.Close()
+	for i := range ch {
+		ofile.WriteString(i.String())
+		ofile.WriteString("\n")
+	}
+	/*/
 	for i := range ch {
 		fmt.Println(i)
 	}
+	//*/
 
 	wg.Wait()
 	fmt.Println("Done")

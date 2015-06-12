@@ -5,19 +5,19 @@ import "fmt"
 // Max length of name
 const MaxName = 31
 
-// Token defines token has fields of KeyId kind and []int32 ([]rune) value
-// If kind is key word, second field has []rune value
-// If kind is token, second field has []int32 value
+// Token defines token has fields of KeyId kind and string or int value
+// If kind is key word, second field has string ID
+// If kind is token, second field has int Value
 type Token struct {
 	Kind  KeyID
-	ID    [MaxName]byte
+	ID    string
 	Value int
 }
 
 func (t Token) String() string {
 	switch {
 	case t.Kind == ID:
-		return fmt.Sprintf("[%s: %s]", t.Kind, string(t.ID[:MaxName]))
+		return fmt.Sprintf("[%s: %s]", t.Kind, string(t.ID))
 	case t.Kind == Num:
 		return fmt.Sprintf("[%s: %d]", t.Kind, t.Value)
 	default:
