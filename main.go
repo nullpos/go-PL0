@@ -146,7 +146,7 @@ func GetToken(f *os.File, ch chan *types.Token) {
 func main() {
 	types.InitCharClassType()
 	types.InitKeyWdToResWd()
-	filename := "../go-PL0/test.pl1"
+	filename := "../go-PL0/test.pl0"
 	file, e := os.Open(filename)
 	if e != nil {
 		fmt.Println(e)
@@ -165,7 +165,7 @@ func main() {
 	}()
 
 	//*
-	ofilename := "../go-PL0/test-convert.pl1"
+	ofilename := "../go-PL0/test-convert.pl0"
 	ofile, oe := os.OpenFile(ofilename, os.O_WRONLY|os.O_CREATE, 0600)
 	if oe != nil {
 		fmt.Println(oe)
