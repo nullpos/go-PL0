@@ -15,11 +15,21 @@ type Token struct {
 }
 
 func (t Token) String() string {
-	return fmt.Sprintf("[%s: %s, %d]", t.Kind, string(t.ID[:MaxName]), t.Value)
+	switch {
+	case t.Kind == ID:
+		return fmt.Sprintf("[%s: %s]", t.Kind, string(t.ID[:MaxName]))
+	case t.Kind == Num:
+		return fmt.Sprintf("[%s: %d]", t.Kind, t.Value)
+	default:
+		return fmt.Sprintf("[%s]", t.Kind)
+	}
 }
 
 // CharClassType has byte key and KeyID value.
 var CharClassType = make(map[byte]KeyID)
+
+// KeyWdToResWd
+var KeyWdToResWd = make(map[KeyID]string)
 
 // InitCharClassType should be called before CharClassType
 func InitCharClassType() {

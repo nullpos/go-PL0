@@ -16,7 +16,126 @@ func GetToken(f *os.File, ch chan *types.Token) {
 	getNextLine := nextLiner(f)
 	for {
 		if getNextLine() {
+			for i, l := 0, len(b); i < l; i++ {
+				token := new(types.Token)
+				if b[i] == ' ' || b[i] == '\t' {
+					continue
+				}
+				func(c byte) {
+					cc := types.CharClassType[c]
+					switch cc {
+					case types.Letter:
+						var tmp [types.MaxName]byte
+						itr := 0
+						for {
+							tmp[itr] = c
+							i++
+							itr++
+							if i == l {
+								i--
+								break
+							}
+							c = b[i]
+							cc = types.CharClassType[c]
+							if cc != types.Digit && cc != types.Letter {
+								i--
+								break
+							}
+						}
+						if itr >= types.MaxName {
+							fmt.Println("too long")
+						}
 
+						for j := types.KeyID(0); j < types.EndOfKeyWd; j++ {
+							if string(j) == string(tmp[:itr]) {
+								token.Kind = j
+								return
+							}
+						}
+						token.Kind = types.ID
+						token.ID = tmp
+						return
+					case types.Digit:
+						num := 0
+						for {
+							num = 10*num + int(c-'0')
+							i++
+							if i == l {
+								i--
+								break
+							}
+							c = b[i]
+							cc = types.CharClassType[c]
+							if cc != types.Digit {
+								i--
+								break
+							}
+						}
+						if num>>31 > 0 {
+							fmt.Println("too large")
+						}
+						token.Kind = types.Num
+						token.Value = num
+						return
+					case types.Colon:
+						if i+1 < l {
+							n := b[i+1]
+							switch {
+							case n == '=':
+								token.Kind = types.Assign // :=
+								i++
+								return
+							default:
+								token.Kind = types.Nul
+								return
+							}
+						} else {
+							token.Kind = cc
+							return
+						}
+					case types.Lss:
+						if i+1 < l {
+							n := b[i+1]
+							switch {
+							case n == '=':
+								token.Kind = types.LssEq // <=
+								i++
+								return
+							case n == '>':
+								token.Kind = types.NotEq // <>
+								i++
+								return
+							default:
+								token.Kind = types.Lss // <
+								return
+							}
+						} else {
+							token.Kind = cc
+							return
+						}
+					case types.Gtr:
+						if i+1 < l {
+							n := b[i+1]
+							switch {
+							case n == '=':
+								token.Kind = types.GtrEq // >=
+								i++
+								return
+							default:
+								token.Kind = types.Gtr // >
+								return
+							}
+						} else {
+							token.Kind = cc
+							return
+						}
+					default:
+						token.Kind = cc
+						return
+					}
+				}(b[i])
+				ch <- token
+			}
 		} else {
 			break
 		}
